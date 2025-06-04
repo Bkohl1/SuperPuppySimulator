@@ -2,9 +2,9 @@
 
 class Colors:
     def __init__(self,RED,GREEN,BLUE):
-        self.RED = RED
-        self.GREEN = GREEN
-        self.BLUE = BLUE
+        self.RED = RED[3]
+        self.GREEN = GREEN[3]
+        self.BLUE = BLUE[3]
 
     # Colors
     red = (255, 0, 0)
