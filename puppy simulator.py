@@ -20,7 +20,7 @@ framerate = 60
 background = black
 timer = pygame.time.Clock()
 
-font = pygame.font.SysFont("comicsans", 30)
+font = pygame.font.SysFont("bahnschrift", 30)
 pygame.display.set_caption("Super Puppy Simulator")
 
 
@@ -28,17 +28,33 @@ pygame.display.set_caption("Super Puppy Simulator")
 # Game variables
 score = 200
 puppy_cost = 100
-gray_value = 1
-orange_value = 2
-draw_gray = False
-draw_orange = False
+puppy_value = 1
+Spuppy_value = 5
+draw_puppy = False
+draw_Spuppy = False
 
 
 # Animation variables
-gray_length = 0
-orange_length = 0
-gray_speed = 1
-orange_speed = .5
+puppy_length = 0
+Spuppy_length = 0
+puppy_speed = 1
+Spuppy_speed = .5
+
+#load sprites
+puppy_sprite = pygame.image.load('Puppy.gif')
+Spuppy_sprite = pygame.image.load('Strong Puppy.png')
+
+#transform scale
+puppy_sprite = pygame.transform.scale(puppy_sprite,(64,64))
+Spuppy_sprite = pygame.transform.scale(Spuppy_sprite,(64,64))
+
+#get rectangles surrounding images
+puppy_rect = puppy_sprite.get_rect()
+Spuppy_rect = Spuppy_sprite.get_rect()
+
+#position sprites
+puppy_rect.topleft = (10,20)
+Spuppy_rect.topleft = (10,80)
 
 opaque_gray_length = 0
 opaque_orange_length = 0
@@ -51,27 +67,41 @@ puppy_cost = 100
 buy_puppy = False
 
 
-# Draw and define functionality of objects on screen
-def draw_task(color, y_coord, button_value, draw, length, speed):
+#makes the score go up smoothly each tick (60 tps)
+def smooth_add(score,money):
+
+    while(money > 0):
+        score+=1
+
+    # Display score
+    display_score = font.render(f"$ {round(score, 2)}", True, white)
+    screen.blit(display_score, (650, 50))
+
+
+
+# Display and define functionality of objects on screen
+def draw_task(color, y_coord, button_money, draw, length, speed):
     global score
-
-
 
     if draw and length < 180:
         length += speed
     elif draw and length >= 180:
         draw = False
         length = 0
-        score += button_value
+        score += button_money
 
-    pygame.draw.circle(screen, color, (30, y_coord), 20, 5)
+    # display sprites
+    screen.blit(puppy_sprite, puppy_rect)
+    screen.blit(Spuppy_sprite, Spuppy_rect)
     pygame.draw.rect(screen, color, [70, y_coord - 15, 180, 30])
     pygame.draw.rect(screen, black, [75, y_coord - 10, 170, 20])
     pygame.draw.rect(screen, color, [70, y_coord - 15, length, 30])
-    value_text = font.render(str(button_value), True, white)
-    screen.blit(value_text, (20, y_coord - 23))
+    #display text
+    value_text = font.render(f"${str(button_money)}", True, white)
+    screen.blit(value_text, (23, y_coord - 13))
     return pygame.Rect(10, y_coord - 20, 40, 40), length, draw
 
+# Draw and define functionality of the "puppy" upgrade
 def puppy_upgrade(x_coord):
     global puppy_amount, buy_puppy, score, puppy_cost
 
@@ -95,15 +125,15 @@ def puppy_upgrade(x_coord):
 
     return puppy
 
-
-def Money_Loop(color, y_coord, length, speed, score, amount):
+# a function that adds money to score automatically
+def Money_Loop(color, y_coord, length, puppy_speed, score, amount):
     # Draw semi-transparent progress bar
     bar_surface = pygame.Surface((length, 30), pygame.SRCALPHA)
     bar_surface.fill((*color, 150))  # Alpha-blended color
     screen.blit(bar_surface, (70, y_coord - 15))
 
     if length < 180:
-        length += speed
+        length += puppy_speed
     elif length >= 180:
         length = 0
         score += amount  # Add passive income
@@ -114,34 +144,49 @@ def Money_Loop(color, y_coord, length, speed, score, amount):
 
 # Game loop
 running = True
+
+
 while running:
     timer.tick(framerate)
     screen.fill(background)
 
-    task1, gray_length, draw_gray = draw_task(gray, 50, gray_value, draw_gray, gray_length, gray_speed)
-    task2, orange_length, draw_orange = draw_task(orange, 100, orange_value, draw_orange, orange_length, orange_speed)
+    #load puppy task
+    task1, puppy_length, draw_puppy = draw_task(gray, 80, puppy_value, draw_puppy, puppy_length, puppy_speed)
+
+    #load strong puppy task
+    task2, Spuppy_length, draw_Spuppy = draw_task(orange, 160, Spuppy_value, draw_Spuppy, Spuppy_length, Spuppy_speed)
 
     puppy_button = puppy_upgrade(800)
+
 
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if task1.collidepoint(event.pos):
-                draw_gray = True
-            if task2.collidepoint(event.pos):
-                draw_orange = True
+            if puppy_rect.collidepoint(event.pos):
+                draw_puppy = True
+            if Spuppy_rect.collidepoint(event.pos):
+                draw_Spuppy = True
             if puppy_button.collidepoint(event.pos):
                 buy_puppy = True
+
 
     if puppy_amount >= 1 and running:
         opaque_gray_length, score = Money_Loop(gray, 50, opaque_gray_length, opaque_gray_speed, score, puppy_amount)
 
 
-    # Display score
-    display_score = font.render(f"$ {round(score,2)}", True, white)
-    screen.blit(display_score, (650, 50))
+    smooth_add(score,)
+
+    # Display mouse coordinates
+    if event.type == pygame.MOUSEMOTION:
+        mouse_pos = str(pygame.mouse.get_pos())
+        mouse_pos = font.render(mouse_pos, True, white)
+        screen.blit(mouse_pos, (500, 400))
+
+
+
+
 
     pygame.display.flip()
 
