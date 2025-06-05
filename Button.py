@@ -27,5 +27,8 @@ class Button:
         self.button_value /= 10
 
 
-Puppy = Button(0,1,1)
-SPuppy = Button(0,5,.5)
+
+Puppy = Button(0,1,.5)
+SPuppy = Button(0,5,.1)
+MPuppy = Button(0,20,.01)
+Super_Puppy = Button(0,100,.005)

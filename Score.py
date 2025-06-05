@@ -1,33 +1,24 @@
-import pygame
-import display
-import Colors
-
-screen = display.screen
-font = display.font
-white = Colors.white
-
 class Score:
-    def __init__(self, money=0, score=0, condition=False, networth=0):
+    def __init__(self, money=200, score=200, networth=200):
         self.money = money
         self.score = score
-        self.condition = condition
         self.networth = networth
-        self.displayed_score = 0
-        self.displayed_networth = 0
+        self.displayed_score = float(score)
+        self.displayed_networth = float(networth)
+        self.displayed_money = float(money)
 
-    def accumulate_networth(self):
-        self.networth += self.money
+    def add_money(self, amount):
+        self.money += amount
+        self.score += amount
+        self.networth += amount
 
-    def update_display(self):
-        if self.displayed_score < self.score:
-            self.displayed_score += min(1, self.score - self.displayed_score)
-        elif self.displayed_score > self.score:
-            self.displayed_score -= min(1, self.displayed_score - self.score)
+    def update_display(self, screen, font, white):
+        # Animate score smoothly (10% of the difference each frame)
+        self.displayed_score += (self.score - self.displayed_score) * .01
+        self.displayed_networth += (self.networth - self.displayed_networth) * .01
+        self.displayed_money+= (self.money - self.displayed_money) * .01
 
-        if self.displayed_networth < self.networth:
-            self.displayed_networth += min(1, self.networth - self.displayed_networth)
-        elif self.displayed_networth > self.networth:
-            self.displayed_networth -= min(1, self.displayed_networth - self.networth)
-
-        screen.blit(font.render(f"$ {round(self.displayed_score, 2)}", True, white), (650, 50))
-        screen.blit(font.render(f"Total Earned: $ {round(self.displayed_networth, 2)}", True, white), (650, 80))
+        # Optional: show current balance
+        screen.blit(font.render(f"Money: $ {round(self.displayed_money)}", True, white), (650, 20))
+        screen.blit(font.render(f"Game Score: {round(self.displayed_score)}", True, white), (650, 50))
+        screen.blit(font.render(f"Total Earned: $ {round(self.displayed_networth)}", True, white), (650, 80))

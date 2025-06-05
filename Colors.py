@@ -1,12 +1,6 @@
 #This class defines an array of colors with the 3 attributes being the RGB values
 
 class Colors:
-    def __init__(self,RED,GREEN,BLUE):
-        self.RED = RED[3]
-        self.GREEN = GREEN[3]
-        self.BLUE = BLUE[3]
-
-    # Colors
     red = (255, 0, 0)
     green = (0, 255, 0)
     white = (255, 255, 255)

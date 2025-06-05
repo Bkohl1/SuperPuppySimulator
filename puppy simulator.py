@@ -36,8 +36,6 @@ steroid_timer = 0
 
     return pygame.Rect(10, y_coord - 20, 40, 40), length, draw, networth, score"""
 
-def draw_sprite_labels():
-
 
 def steroid_boost(score, button_clicked, steroid_cost, steroid_active, steroid_timer,opacity):
 
@@ -94,7 +92,6 @@ running = True
 while running:
 
 
-    draw_sprite_labels()
 
     # Apply and Disable steroid effect
     if steroid_active:
@@ -110,21 +107,10 @@ while running:
     if puppy_amount >= 1:
         opaque_gray_length, score, networth = money_loop(gray, 50, opaque_gray_length, opaque_gray_speed, score, puppy_amount, networth,steroid_active)
 
-    # Tasks
-    task1, puppy_length, draw_puppy, networth, score = draw_task(puppy_sprite, gray, 80, puppy_value, draw_puppy, puppy_length, current_puppy_speed, networth, score)
-    task2, Spuppy_length, draw_Spuppy, networth, score = draw_task(Spuppy_sprite, orange, 160, Spuppy_value, draw_Spuppy, Spuppy_length, Spuppy_speed, networth, score)
 
-    # UI buttons
-    steroid_button, steroid_cost, score, bought, steroid_active, steroid_timer,opacity = steroid_boost(score, bought, steroid_cost, steroid_active, steroid_timer,opacity)
-    puppy_button, puppy_cost, puppy_amount, score, buy_puppy = puppy_upgrade(800, score, puppy_cost, puppy_amount,buy_puppy)
 
-    # Score animation
-    displayed_score += min(1, score - displayed_score) if displayed_score < score else -min(1, displayed_score - score)
-    displayed_networth += min(1, networth - displayed_networth) if displayed_networth < networth else -min(1, displayed_networth - networth)
 
-    screen.blit(font.render(f"$ {round(displayed_score, 2)}", True, white), (650, 50))
-    screen.blit(font.render(f"Total Earned: $ {round(displayed_networth, 2)}", True, white), (650, 80))
-    screen.blit(font.render(str(pygame.mouse.get_pos()), True, white), (800, 50))
+
 
 
 
