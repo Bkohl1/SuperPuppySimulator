@@ -69,9 +69,7 @@ def steroid_boost(score, button_clicked, steroid_cost, steroid_active, steroid_t
 
 
 def money_loop(color, y_coord, length, speed, score, amount, networth, steroid_active):
-    bar_surface = pygame.Surface((length, 30), pygame.SRCALPHA)
-    bar_surface.fill((*color, 150))
-    screen.blit(bar_surface, (70, y_coord - 15))
+
 
     # Apply steroid speed multiplier
     if steroid_active:

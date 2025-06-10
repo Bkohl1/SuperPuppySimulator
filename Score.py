@@ -1,8 +1,9 @@
 class Score:
-    def __init__(self, money=200, score=200, networth=200):
+    def __init__(self, money=200, score=200, networth=200,auto_income=0):
         self.money = money
         self.score = score
         self.networth = networth
+        self.auto_income = auto_income
         self.displayed_score = float(score)
         self.displayed_networth = float(networth)
         self.displayed_money = float(money)
@@ -19,6 +20,6 @@ class Score:
         self.displayed_money+= (self.money - self.displayed_money) * .01
 
         # Optional: show current balance
-        screen.blit(font.render(f"Money: $ {round(self.displayed_money)}", True, white), (650, 20))
-        screen.blit(font.render(f"Game Score: {round(self.displayed_score)}", True, white), (650, 50))
-        screen.blit(font.render(f"Total Earned: $ {round(self.displayed_networth)}", True, white), (650, 80))
+        screen.blit(font.render(f"Money: $ {round(self.displayed_money)}", True, white), (800, 20))
+        screen.blit(font.render(f"Game Score: {round(self.displayed_score)}", True, white), (800, 50))
+        screen.blit(font.render(f"Total Earned: $ {round(self.displayed_networth)}", True, white), (800, 80))
